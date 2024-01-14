@@ -1,6 +1,6 @@
-class Solution {
+class Solution{
 public:
-    
+
     vector<int> lpsFind(string needle){
         int n = needle.size();
         vector<int> lps(n, 0);
@@ -23,11 +23,12 @@ public:
         }
         return lps;
     }
-    
-    int strStr(string haystack, string needle) {
-        
-        if(needle.size() == 0) return -1;
+
+    vector <int> search(string needle, string haystack){
+       
+        if(needle.size() == 0) return {-1};
         vector<int> lps = lpsFind(needle);
+        vector<int> ans;
         
         int i = 0; // haystack
         int j = 0; // needle
@@ -44,8 +45,9 @@ public:
                     j = lps[j-1];
                 }
             }
-            if(j == needle.size()) return i-needle.size();
+            if(j == needle.size()) ans.push_back(i-needle.size()+1);
         }
-        return -1;
+        return ans;
     }
+     
 };

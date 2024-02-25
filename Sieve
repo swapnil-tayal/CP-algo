@@ -1,0 +1,25 @@
+#define MAXN 1000001
+vector<long long> spf(MAXN);
+long long sieve() {
+    spf[1] = 1;
+    for (long long i = 2; i < MAXN; i++) spf[i] = i;
+
+    for (long long i = 4; i < MAXN; i += 2) spf[i] = 2;
+
+    for (long long i = 3; i * i < MAXN; i++) {
+        if (spf[i] == i) {
+            for (long long j = i * i; j < MAXN; j += i) {
+                if (spf[j] == j) spf[j] = i;
+            }
+        }
+    }
+    return 1;
+}
+vector<long long> getFactorization(long long x) {
+    vector<long long> ret;
+    while (x != 1) {
+        ret.push_back(spf[x]);
+        x = x / spf[x];
+    }
+    return ret;
+}

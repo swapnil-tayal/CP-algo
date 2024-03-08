@@ -1,0 +1,60 @@
+class segTree{
+
+    vector<int> segMAX;
+    vector<int> segMIN;
+public:
+    segTree(int n){
+        segMAX.resize((4*n)+1 ,0);
+        segMIN.resize((4*n)+1 ,0);
+    }
+                        0        0       n-1      
+    void buildMAX(int ind, int low, int high, vector<int> &arr){
+        if(low == high){
+            segMAX[ind] = arr[low];
+            return;
+        }
+        int mid = (low+high)/2;
+        buildMAX(ind*2 + 1, low, mid, arr);
+        buildMAX(ind*2 + 2, mid+1, high, arr);
+        segMAX[ind] = max(segMAX[2*ind+1], segMAX[2*ind+2]);
+    }
+                        0        0       n-1      
+    void buildMIN(int ind, int low, int high, vector<int> &arr){
+        if(low == high){
+            segMIN[ind] = arr[low];
+            return;
+        }
+        int mid = (low+high)/2;
+        buildMIN(ind*2 + 1, low, mid, arr);
+        buildMIN(ind*2 + 2, mid+1, high, arr);
+        segMIN[ind] = min(segMIN[2*ind+1], segMIN[2*ind+2]);
+    }
+                       0        0       n-1      r      e
+    int queryMAX(int ind, int low, int high, int l, int r){
+        
+        // no overlap
+        if(r < low || high < l) return INT_MIN;
+
+        // complete overlap
+        if(low >= l and high <= r) return segMAX[ind];
+
+        int mid = (low+high)/2;
+        int left = queryMAX(2*ind + 1, low, mid, l, r);
+        int right = queryMAX(2*ind + 2, mid+1, high, l, r);
+        return max(left, right);
+    }
+                       0        0       n-1      r      e
+    int queryMIN(int ind, int low, int high, int l, int r){
+        
+        // no overlap
+        if(r < low || high < l) return INT_MAX;
+
+        // complete overlap
+        if(low >= l and high <= r) return segMIN[ind];
+
+        int mid = (low+high)/2;
+        int left = queryMIN(2*ind + 1, low, mid, l, r);
+        int right = queryMIN(2*ind + 2, mid+1, high, l, r);
+        return min(left, right);
+    }
+};
